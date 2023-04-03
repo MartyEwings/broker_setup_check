@@ -1,9 +1,23 @@
-plan broker_setup_check::broker_setup_check {
-  $compiler_nodes = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = 'pe_complier' }').map |$r| { $r['certname'] }
+plan broker_setup_check::broker_setup_check(
+  Optional[TargetSpec] $targets          = undef,
+) {
+  # Query PuppetDB if $targets is not unspecified
+  $_targets = if $targets =~ Undef {
+    $certnames_or_error = catch_errors() || {
+      puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "pe_complier" }').map |$r| { $r['certname'] }
+    }
+    if $certnames_or_error =~ Error {
+      fail_plan("PuppetDB query failed: ${certnames_or_error}")
+    }
+    get_targets($certnames_or_error)
+  } else {
+    get_targets($targets)
+  }
+
   $primary_nodes_query = 'nodes { facts.pe_status_check_role = "primary" }'
 
   # Run the task against all compiler nodes
-  $broker_results = run_task('get_agent_broker', $compiler_nodes)
+  $broker_results = run_task('get_agent_broker', $_targets)
 
   # Build a PQL query to find all primary nodes
   $primary_nodes = query_nodes($primary_nodes_query)
