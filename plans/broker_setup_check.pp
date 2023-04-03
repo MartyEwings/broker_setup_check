@@ -5,5 +5,17 @@ plan broker_setup_check::broker_setup_check(
   $broker_results = run_task('broker_setup_check::get_agent_broker', $compilers)
 
   # Build a PQL query to find all primary nodes
-  $primary_nodes = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
+  $primary_node = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
+
+  $compiler_results = $broker_results['$compilers']
+
+  $compiler_results.each |$compilers| {
+    $node_uri = $compilers['uri']
+
+    if $primary_node != $node_uri {
+      fail("The value of the 'uri' the  'primary' parameter")
+    }
+  }
+
+  return 'ok'
 }
