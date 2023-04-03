@@ -1,3 +1,4 @@
+#!/opt/puppetlabs/puppet/bin/ruby
 require 'json'
 
 # Read the JSON data from the file
@@ -10,7 +11,7 @@ conf_json = JSON.parse(conf_data)
 broker_uri = conf_json['broker-ws-uris'][0]
 
 # Create a hash with the broker URI
-result = { "broker_uri" => broker_uri }
+result = { 'broker_uri' => broker_uri }
 
 # Convert the hash to a JSON string
 result_json = result.to_json
