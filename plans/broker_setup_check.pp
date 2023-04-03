@@ -8,7 +8,7 @@ plan broker_setup_check::broker_setup_check(
   $primary_nodes = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
   # Extract the broker string from the task results
-  $broker_strings = $broker_results.map |$node, $result| { $result['broker_string'] }
+  $broker_strings = $broker_results.map |$node, $result| { $result['broker_uri'] }
 
   # Compare the broker strings to the PQL query of primary nodes
   if $broker_strings == $primary_nodes {
