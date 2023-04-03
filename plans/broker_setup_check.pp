@@ -6,7 +6,6 @@ plan broker_setup_check::broker_setup_check(
   # Build a PQL query to find all primary nodes
   $primary_node = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
-  $broker_results.each |$compilers, $result| {
-    notice("The broker for compiler ${compilers} is ${result['value']['broker_uri']}")
-  }
+return " the results are $broker_results.value"
+
 }
