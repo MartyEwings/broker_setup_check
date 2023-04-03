@@ -11,7 +11,7 @@ plan broker_setup_check::broker_setup_check(
     $node_uri = $compilers['uri']
 
     if $primary_node != $node_uri {
-      fail("The value of the 'uri' the  'primary' parameter")
+      return "the compiler $node_uri does not match the primary node $primary_node  ")
     }
   }
 
