@@ -1,4 +1,4 @@
-plan broker_setup_check {
+plan broker_setup_check::broker_setup_check {
   $compiler_nodes = filter_nodes(facts.pe_status_check_role == 'pe_compiler')
   $primary_nodes_query = 'nodes { facts.pe_status_check_role = "primary" }'
 
