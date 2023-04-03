@@ -8,7 +8,7 @@ plan broker_setup_check::broker_setup_check(
   $primary_node = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
   $broker_results.each |$compilers| {
-    $node_uri = $compilers['uri']
+    $node_uri = $broker_results[$compilers['broker_uri']]
 
     if $primary_node != $node_uri {
       return "the compiler ${node_uri} does not match the primary node ${primary_node}  "
