@@ -7,6 +7,6 @@ plan broker_setup_check::broker_setup_check(
   $primary_node = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
   $broker_results.results.each |$result| {
-    notice ("Result for node ${result.target}: ${result.value}")
+    notice("Result for node ${result.target}: ${result.value}")
   }
 }
