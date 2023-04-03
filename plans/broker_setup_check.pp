@@ -1,5 +1,5 @@
 plan broker_setup_check::broker_setup_check {
-  $compiler_nodes = filter_nodes(facts.pe_status_check_role == 'pe_compiler')
+  $compiler_nodes = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = 'pe_complier' }').map |$r| { $r['certname'] }
   $primary_nodes_query = 'nodes { facts.pe_status_check_role = "primary" }'
 
   # Run the task against all compiler nodes
