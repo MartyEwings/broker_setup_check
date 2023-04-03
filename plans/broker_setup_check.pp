@@ -1,5 +1,5 @@
 plan broker_setup_check::broker_setup_check(
-  TargetSpec $compilers = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "pe_complier" }').map |$r| { $r['certname'] },
+  TargetSpec $compilers = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "pe_compiler" }').map |$r| { $r['certname'] },
 ) {
   # Run the task against all compiler nodes
   $broker_results = run_task('broker_setup_check::get_agent_broker', $compilers)
