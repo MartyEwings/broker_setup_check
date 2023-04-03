@@ -14,10 +14,9 @@ plan broker_setup_check::broker_setup_check(
     get_targets($targets)
   }
 
-  $primary_nodes_query = 'nodes { facts.pe_status_check_role = "primary" }'
 
   # Run the task against all compiler nodes
-  $broker_results = run_task('get_agent_broker', $_targets)
+  $broker_results = run_task('broker_setup_check::get_agent_broker', $_targets)
 
   # Build a PQL query to find all primary nodes
   $primary_nodes = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
