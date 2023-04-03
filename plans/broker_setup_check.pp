@@ -6,5 +6,6 @@ plan broker_setup_check::broker_setup_check(
   # Build a PQL query to find all primary nodes
   $primary_node = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
-  $broker_results.to_data.each |$result_hash| { notice($result_hash['result']['stdout']) }
+  $uris = $broker_results['broker_uri']
+  notice("broker uris: ${uris}")
 }
