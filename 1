@@ -3,8 +3,17 @@ plan broker_setup_check::broker_setup_check(
 ) {
   # Run the task against all compiler nodes
   $broker_results = run_task('broker_setup_check::get_agent_broker', $compilers)
+
   # Build a PQL query to find all primary nodes
   $primary_node = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
-  $broker_results.to_data.each |$result_hash| { notice($result_hash['result']['stdout']) }
+  $broker_results.each  {
+    $node_uri = $broker_results
+
+    if $primary_node != $node_uri {
+      return "the compiler ${node_uri} does not match the primary node ${primary_node}  "
+    }
+  }
+
+  return 'ok'
 }
