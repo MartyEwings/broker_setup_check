@@ -7,13 +7,22 @@ plan broker_setup_check::broker_setup_check(
   # Build a PQL query to find all primary nodes
   $primary_nodes = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "primary" }').map |$r| { $r['certname'] }
 
-  # Extract the broker string from the task results
-  $broker_strings = $broker_results.map |$node, $result| { $result['broker_uri'] }
+  $all_ok = true
 
-  # Compare the broker strings to the PQL query of primary nodes
-  if $broker_strings == $primary_nodes {
-    notice('configured correctly')
-  } else {
-    notice('configured incorrectly')
+  # Iterate over each target and compare its broker results with primary nodes
+  $compilers.each |$target| {
+    if $broker_results[$target] == $primary_nodes {
+      notice("Broker setup check passed for $target")
+    } else {
+      notice("Broker setup check failed for $target")
+      $all_ok = false
+    }
   }
+
+  if $all_ok {
+    notice("Broker setup check passed for all targets")
+  } else {
+    fail("Broker setup check failed for one or more targets")
+  }
+
 }
