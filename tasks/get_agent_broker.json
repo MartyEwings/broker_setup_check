@@ -1,7 +1,6 @@
 {
   "puppet_task_version": 1,
-  "supports_noop": false,
-  "description": "A short description of this task",
+  "description": "A task to return the configured broker_uri in a pxp-agent configuration on a puppet agent",
   "parameters": {
   }
 }

@@ -1,3 +1,4 @@
+# @summary Plan to confirm if the compiler broker services are correctly configured to connect to the Primary broker service
 plan broker_setup_check::broker_setup_check(
   TargetSpec $compilers = puppetdb_query('inventory[certname]{ facts.pe_status_check_role = "pe_compiler" }').map |$r| { $r['certname'] },
 ) {
